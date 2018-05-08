@@ -1,0 +1,35 @@
+{
+  "name": "tencentyoutuyun",
+  "version": "1.0.0",
+  "description": "node sdk for qcloud youtu",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TencentYouTu/nodejs_sdk.git"
+  },
+  "keywords": [
+    "qcloud",
+    "youtu"
+  ],
+  "author": "tencentyoutuyun",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TencentYouTu/nodejs_sdk/issues"
+  },
+  "homepage": "https://github.com/TencentYouTu/nodejs_sdk#readme",
+  "engines": [
+    "node >= 0.4.7"
+  ],
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "gm": "^1.23.1",
+    "iconv-lite": "^0.4.13",
+    "images": "^3.0.1",
+    "multiparty": "^4.1.3",
+    "request": "^2.85.0"
+  }
+}

@@ -1,0 +1,142 @@
+<!-- 1 templat 标签 -->
+<template>
+  <!-- 必须只能放根节点 -->
+  <div class="root">
+    <!-- 1 大图片 -->
+    <div class="big_img">
+      <image src="{{src}}"></image>
+    </div>
+    <!-- 2 很多的小图片 -->
+    <div class="sm_imgs">
+      <list>
+        <list-item type="img" onclick="toggleImg($item.src,$item.model_id)" for="imgArr">
+          <image src="{{$item.src}}"></image>
+        </list-item>
+      </list>
+    </div>
+    <!-- 3 按钮 -->
+    <div class="tools">
+      <input type="button" value="上传图片" onclick="pickPhoto()">
+    </div>
+  </div>
+</template>
+<!-- 2 style 方式 -->
+<style>
+  /* 
+  快应用的布局 是使用 flex 弹性盒子布局方式  
+   */
+
+  .root {
+    /* 开启换行 */
+    flex-wrap: wrap;
+
+  }
+
+  .big_img {
+    width: 100%;
+    height: 50%;
+    background-color: aqua;
+    justify-content: center;
+  }
+
+  .big_img image {
+    width: 80%;
+  }
+
+  .sm_imgs {
+    width: 100%;
+    height: 30%;
+  }
+
+  .sm_imgs list {
+    /* 横排列 */
+    flex-direction: row;
+  }
+
+  .tools {
+    width: 100%;
+    height: 15%;
+    /* 子元素居中 */
+    justify-content: center;
+  }
+
+  .tools input {
+    width: 60%;
+    background-color: #0094ff;
+    color: #fff;
+    border-radius: 15px;
+  }
+</style>
+<!-- 3 script js 逻辑 -->
+<script>
+  // 导入data.js 文件
+  import imgData from "../data";
+  import media from '@system.media'
+  import request from '@system.request'
+  import router from "@system.router";
+  export default {
+    data: {
+      src: imgData.imgArr[0].src,
+      imgArr: imgData.imgArr,
+      model_id: imgData.imgArr[0].model_id
+    },
+    toggleImg: function (src, model_id) {
+      this.src = src;
+      this.model_id = model_id;
+    },
+    pickPhoto: function () {
+
+      // this.model_id
+      let that = this;
+
+      media.pickImage({
+        success: function (data) {
+          // console.log(`选择图片成功: ${data.uri}`)
+          /* 
+          成功获取图片之后
+          1 将图片信息发送到后台进行 图片的融合
+          2 拿到融合之后的结果 在第二个页面进行显示 
+           */
+
+          // 获取图片路径
+          let fileUri = data.uri;
+          request.upload({
+            url: "http://192.168.23.1:3003/fuse?model_id=" + that.model_id,
+            files: [{
+              name: "qaFile",
+              uri: fileUri
+            }],
+            success: function (r) {
+              // console.log("上传到后台成功");
+              console.log(JSON.stringify(r));
+              // console.log(JSON.parse(r.data).img_url);
+
+              // 判断状态码
+              if (r.code == 200) {
+                var dataObj = JSON.parse(r.data);
+                // 表示合成成功
+                if (dataObj.ret && dataObj.ret == 0) {
+                  // 跳转页面
+                  router.push({
+                    uri: "/DemoDetail",
+                    params: {
+                      // 把图片路径传递过去
+                      img_url: dataObj.img_url
+                    }
+                  })
+                }
+              }
+            },
+            fail: function (data1, code) {
+              console.log("上传到后台失败");
+              console.log(code);
+            }
+          })
+        },
+        fail: function () {
+          console.log("选择图片失败");
+        }
+      });
+    }
+  }
+</script>

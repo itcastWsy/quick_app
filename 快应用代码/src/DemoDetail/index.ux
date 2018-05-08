@@ -1,0 +1,24 @@
+<template>
+  <div class="root">
+    <image src="{{img_url}}"></image>
+  </div>
+</template>
+<style>
+  .root{
+    justify-content: center;
+    width: 100%;
+  }
+  image{
+    width: 80%;
+   
+  }
+</style>
+<script>
+  import router from "@system.router";
+ export default{
+  protected:{
+    // 接收上一个页面发送过来的请求数据
+     img_url:""
+   }
+ }  
+</script>
