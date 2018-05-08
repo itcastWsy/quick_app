@@ -230,7 +230,7 @@ npm run watch
 
 ### 4.3.3. 后台接口
 
-- 接口地址 `http:ip:3003/face`
+- 接口地址 `http:ip:3003/fuse`
 - 请求方式 `post`
 - 参数
   - 图片文件
